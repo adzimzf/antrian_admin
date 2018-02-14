@@ -1,0 +1,8 @@
+.div-delete{
+    position: relative;
+    height:75px;
+}
+.form-delete{
+    position: absolute;
+    bottom: 0;
+}
