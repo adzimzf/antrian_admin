@@ -13,9 +13,9 @@ use Validator as Valid;
 
 class Helper
 {
-    public static function getCusId($data)
+    public static function getCusId($request)
     {
-        $token = explode(" ", $data)[1];
+        $token = explode(" ", $request->header("Authorization"))[1];
         try {
             $credentials = JWT::decode($token, env('SECRET_KEY'), ['HS256']);
         } catch(ExpiredException $e) {
@@ -29,7 +29,7 @@ class Helper
                 'error' => 'An error while decoding token.'
             ], 400));
         }
-        return $credentials->aud;
+        return $credentials->uid;
     }
 
     public static function validate($request, $data)
@@ -47,6 +47,17 @@ class Helper
                 "data" => null
             ]));
         }
+    }
+
+    public static function response($status, $message, $data)
+    {
+        $st = $status ? "success" : "error";
+        header('Content-Type: application/json');
+        exit(response()->json([
+            "status" => $st,
+            "message" => $message,
+            "data" => $data
+        ]));
     }
 
 

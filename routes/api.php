@@ -17,7 +17,5 @@ Route::post("/login",       "API\AuthController@login");
 Route::post("/register",    "API\AuthController@register");
 
 Route::group(['middleware' => 'ApiAuth'], function (){
-   Route::get('/register/queue', function (Request $request){
-       return "test";
-   });
+   Route::post('/logout',        "API\AuthController@logout");
 });

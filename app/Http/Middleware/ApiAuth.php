@@ -9,9 +9,10 @@
 namespace App\Http\Middleware;
 
 
-use App\User;
+use App\Http\Libraries\Helper;
 use Closure;
-use Illuminate\Http\Response;
+use \Firebase\JWT\JWT;
+use App\Models\Customers;
 
 class ApiAuth
 {
@@ -25,34 +26,25 @@ class ApiAuth
     public function handle($request, Closure $next)
     {
         $pieces = explode(" ", $request->header('AUTHORIZATION'));
+        $cus    = Customers::where(["auth_token"=>$pieces[1], "is_login"=>1])->first();
 
         if (count($pieces) > 1){
-            $query = User::where("auth_token", "=", $pieces[1]);
-            $token = $query->first();
             if (!empty($pieces[1])){
-                if ($pieces[0] == "ADZIM" && !is_null($token)) {
-//                    if ($token->auth_expiry > date("Y-m-d H:s:i")){
-                    //update auth expr
-                    return $next($request);
+                if ($pieces[0] == "ADZIM" && $cus) {
+                   try {
+                        $credentials = JWT::decode($pieces[1], env('SECRET_KEY'), ['HS256']);
+                        return $next($request);
+                    } catch(ExpiredException $e) {
+                        Helper::response(false, "Token expired", null);
+                    } catch(Exception $e) {
+                        Helper::response(false, "Error decoding token", null);
+                    }
                 }
             }
         }
 
-        return $this->sendError();
+        Helper::response(false, "Worng token", null);
 
-    }
-
-    /**
-     * Send error response
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    private function sendError($messages = 'Wrong Token')
-    {
-        $return["error"] = true;
-        $return["message"] = $messages;
-        $return['data'] = null;
-        return response()->json($return);
     }
 
 }

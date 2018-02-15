@@ -10,9 +10,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Customer extends Model
+class Customers extends Model
 {
-    protected $table = 'customer';
+    protected $table = 'customers';
 
     protected $primaryKey = 'id';
 
