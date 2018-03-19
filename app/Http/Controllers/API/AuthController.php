@@ -20,15 +20,8 @@ class AuthController extends Controller
     {
         $field = "email";
         $param = $request->input("email");
-        Helper::validate($request, [
-            "email"  => "email"
-        ]);
-        if (!$request->input("email")){
+        if(!filter_var($request->input("email"), FILTER_VALIDATE_EMAIL)) {
             $field = "username";
-            $param = $request->input("username");
-            if (!$request->input("username")){
-                Helper::response(false, "Email or username required", null);
-            }
         }
 
         Helper::validate($request, [
@@ -52,7 +45,7 @@ class AuthController extends Controller
                     "is_login"   => 1
                 ]);
             if ($cus == 1) {
-                $data = Customers::where([$field=>$param, "password"=>md5($password)])->first();
+                $data["user"] = Customers::where([$field=>$param, "password"=>md5($password)])->first();
                 Helper::response(true, "Success Login", $data);
             }else{
                 Helper::response(false, "Account already login", null);

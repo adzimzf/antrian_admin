@@ -121,6 +121,7 @@
                                                     <div class="form-group cuz-form-group">
                                                         <label for="exampleInputEmail1">Duplex</label>
                                                         <select name="detail-duplex[]" id="" class="form-control">
+                                                            <option value="none">None</option>
                                                             <option value="Short">Short</option>
                                                             <option value="Long">Long</option>
                                                         </select>

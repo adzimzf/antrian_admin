@@ -19,3 +19,14 @@ Route::post("/register",    "API\AuthController@register");
 Route::group(['middleware' => 'ApiAuth'], function (){
    Route::post('/logout',        "API\AuthController@logout");
 });
+
+Route::group(["prefix"=>"rs"], function (){
+    Route::get("get/{name?}/{poly?}", "API\RSController@getByNameAndPoly");
+    Route::get("getjadwal/{id}", "API\RSController@getJadwalByName");
+});
+Route::group(["prefix"=>"poly"], function (){
+    Route::get("get", "API\PolyController@get");
+});
+Route::group(["prefix"=>"antrian"], function () {
+    Route::post("set", "API\AntrianController@set");
+});
