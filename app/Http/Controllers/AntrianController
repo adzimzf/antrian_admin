@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\JenisCetakan;
+use App\Models\JenisKertas;
+use App\Models\SuratJalan;
+use App\Models\SuratJalanDetail;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Session;
+
+class AntrianController extends Controller
+{
+    public function sendNotification()
+    {
+
+    }
+}

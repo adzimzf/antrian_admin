@@ -29,4 +29,5 @@ Route::group(["prefix"=>"poly"], function (){
 });
 Route::group(["prefix"=>"antrian"], function () {
     Route::post("set", "API\AntrianController@set");
+    Route::get("get/detail/{id}", "API\AntrianController@getDetail");
 });

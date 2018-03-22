@@ -47,3 +47,7 @@ Route::group(['prefix'=>'operator','middleware' => 'Operator'], function () {
     Route::get("process/{id}",     'OperatorController@getProcess');
     Route::get("process/setDone/ajax",     'OperatorController@setDone');
 });
+
+Route::group(['prefix'=>'antrian'], function () {
+    Route::get('tesNotif',             'AntrianController@sendNotif');
+});
