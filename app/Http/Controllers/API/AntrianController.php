@@ -9,9 +9,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Libraries\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Libraries\Helper;
 
 class AntrianController extends Controller
 {
@@ -31,8 +31,10 @@ class AntrianController extends Controller
         //get last antrian
         $antrian = DB::table("antrian")
             ->where(["id_rs"=>$jadwal->id_rs, "id_poly"=>$jadwal->id_poly])
+            ->join("rs", "rs.id", "antrian.id_rs")
+            ->join("poly", "poly.id", "id_poly")
             ->orderBy("antrian_ke", "desc")
-            ->first(["antrian_ke"]);
+            ->first(["antrian_ke", DB::raw("rs.nama as nama_rs"), DB::raw("poly.nama as nama_poly")]);
         $antrian_ke = 0;
         if (count($antrian) != 0) {
             $antrian_ke = $antrian->antrian_ke;
@@ -55,6 +57,11 @@ class AntrianController extends Controller
         $res["nomer_antrian"] = $nomerAntrian;
         $res["id_rs"] = $jadwal->id_rs;
         $res["id_poly"] = $jadwal->id_poly;
+        $res["tanggal"] = $jadwal->tanggal;
+        $res["mulai_jam"] = $jadwal->mulai_jam;
+        $res["nama_rs"] = $antrian->nama_rs;
+        $res["nama_poly"] = $antrian->nama_poly;
+
 
         if ($data) {
             Helper::response(true, "Berhasil Ambil Antrian", $res);
