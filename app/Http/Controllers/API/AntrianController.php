@@ -90,4 +90,30 @@ class AntrianController extends Controller
         antrian.id=$id"));
         Helper::response(true, "Data Detail", $dataAntrian);
     }
+
+    public function getHistory($id)
+    {
+        $dataAntrian = DB::select(DB::raw("
+        SELECT 
+        antrian.id AS antrian_id,
+        antrian.antrian_ke AS antrian_ke,
+        antrian.nomer_antrian as nomer_antrian,
+        rs.id AS rs_id,
+        rs.nama AS rs_nama,
+        rs.alamat AS rs_alamat,
+        poly.id AS poly_id,
+        poly.nama AS poly_nama,
+        users.id AS dokter_id,
+        users.name AS dokter_nama,
+        antrian.tanggal AS tanggal,
+        antrian.status as status
+        FROM `antrian`
+        JOIN rs ON rs.id = antrian.id_rs
+        JOIN poly ON poly.id = antrian.id_poly
+        JOIN users ON users.id = antrian.id_dokter
+        WHERE
+        antrian.id_cust='$id'
+        ORDER BY antrian.tanggal DESC"));
+        Helper::response(true, "Data Detail", $dataAntrian);
+    }
 }

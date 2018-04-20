@@ -9,8 +9,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
 use App\Http\Libraries\Helper;
+use DateTime;
+use Illuminate\Support\Facades\DB;
 
 class RSController extends Controller
 {
@@ -48,6 +49,9 @@ class RSController extends Controller
     }
 
     public function getJadwalByName($id) {
+        $datetime = new DateTime('tomorrow');
+        $tangal = $datetime->format('Y-m-d');
+
         $jadwal = DB::select(DB::raw(
             "SELECT 
             jadwal_rs.id as id_jadwal,
@@ -62,7 +66,7 @@ class RSController extends Controller
             JOIN users ON jadwal_rs.id_dokter=users.id
             JOIN poly ON jadwal_rs.id_poly = poly.id
             WHERE
-            rs.id = $id"
+            rs.id = '$id'"
         ));
         Helper::response(true, "Success get Jadwal", $jadwal);
     }
